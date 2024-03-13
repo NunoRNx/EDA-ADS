@@ -11,58 +11,6 @@
 #include "header.h"
 
 #pragma region leitura
-/* //*
- * @brief Leitura dos valores presentes no ficheiro de texto.
- * 
- * Leitura de valores separardos entre ";" na matriz com divisão de linha na divisão de linhas do mesmo ficheiro.
- * 
- * @param num valor inteiro lido do ficheiro.
- * @param s caracter lido após o valor inteiro para determinar se é o último valor da linha.
- * @param j parametro para rodar a matriz para a proxima coluna.
- * @param i parametro para rodar a matriz para a proxima linha.
- * @return fazemos a retoma do apondator da caixa inicial da lista.
- */
-/**Matrix* ler(Matrix* inicio, const char* filename){
-    int num, j=0;
-    char s;
-    
-    FILE *file=fopen(filename, "r");
-    Matrix* aux=inicio;
-    if(file==NULL)return NULL; //erro ao abrir file
-    while ((fscanf(file, "%d%c", &num, &s) ==2))//leitura do primeiro valor
-    {
-        aux=addColumn(aux);
-        replaceValue(aux,0,j,num);
-        j++;
-        if(s=='\n'){
-            break;
-        }
-    }
-    j=0;
-    int i=1;
-    aux=addLine(aux,i);
-    while ((fscanf(file, "%d%c", &num, &s) == 2))
-    {
-        replaceValue(aux,i,j,num);
-        if (s==';')
-        {
-            j++;
-        }else if(s=='\n'){
-            i++;
-            j=0;
-            aux=addLine(aux,i);
-        }else{
-            printf("\nMatriz mal formatada\n");
-        }
-    }
-    replaceValue(aux,i,j,num);
-    fclose(file);
-    if(i==0)return NULL;//linha 13
-    printf("leu com sucesso\n");
-    return aux;
-}*/
-#pragma endregion
-#pragma region leitura teste
 /**
  * @brief Leitura dos valores presentes no ficheiro de texto.
  * 
@@ -83,7 +31,7 @@ Matrix* ler(Matrix* inicio, const char* filename){
     if(file==NULL)return NULL; //erro ao abrir file
     while ((fscanf(file, "%d%c", &num, &s) ==2))//leitura do primeiro valor
     {
-        aux=addColumn(aux);
+        aux=addColumn(aux,j);
         replaceValue(aux,0,j,num);
         j++;
         if(s=='\n'){
@@ -93,10 +41,8 @@ Matrix* ler(Matrix* inicio, const char* filename){
     j=0;
     int i=1;
     aux=addLine(aux,i);
-    printf("ler teste 1\n");
     while ((fscanf(file, "%d%c", &num, &s) == 2))
     {
-        printf("ler teste 2\n");
         replaceValue(aux,i,j,num);
         if (s==';')
         {
@@ -108,7 +54,6 @@ Matrix* ler(Matrix* inicio, const char* filename){
         }else{
             printf("\nMatriz mal formatada\n");
         }
-        printf("ler teste 3\n");
     }
     replaceValue(aux,i,j,num);
     fclose(file);
@@ -158,7 +103,6 @@ Matrix* addLine(Matrix* inicio, int linha){
     Matrix* aux=inicio;
     Matrix* ant=inicio;
     Matrix* next=inicio;
-    printMatrix(inicio);
     if (aux==NULL)
     {
         aux= (Matrix*)malloc(sizeof(Matrix));
@@ -166,18 +110,28 @@ Matrix* addLine(Matrix* inicio, int linha){
         aux->proxc=NULL;
         aux->proxl=NULL;
         aux->x=0;
-        printMatrix(inicio);
         return aux;
     }
     if (linha==0)
     {
-        aux= (Matrix*)malloc(sizeof(Matrix));
+        aux=(Matrix*)malloc(sizeof(Matrix));
         if(aux==NULL)return inicio;
         aux->proxl=next;
         aux->proxc=NULL;
+        aux->x=0;
         inicio=aux;
-        ant=inicio;
-        next=inicio;
+        next=next->proxc;
+        while (next!=NULL)
+        {
+            aux->proxc=(Matrix*)malloc(sizeof(Matrix));
+            if(aux->proxc==NULL)return inicio;
+            aux=aux->proxc;
+            aux->x=0;
+            aux->proxc=NULL;
+            aux->proxl=next;
+            next=next->proxc;
+        }
+        return inicio;
     }else{
         for (int i = 0; i < linha-1; i++)
         {
@@ -187,45 +141,30 @@ Matrix* addLine(Matrix* inicio, int linha){
         {
             return inicio;
         }
-    }
-    aux=(Matrix*)malloc(sizeof(Matrix));
-    if(aux==NULL)return inicio;
-    next=next->proxl;
-    if (next==NULL)
-    {
-        aux->proxl=NULL;
-    }else{
+        aux=(Matrix*)malloc(sizeof(Matrix));
+        if(aux==NULL)return inicio;
+        next=ant;
+        next=next->proxl;
         aux->proxl=next;
-    }
-    aux->x=0;
-    aux->proxc=NULL;
-    ant=ant->proxc;
-    int i=0;
-    printf("\n\n\nMegaTeste\n\n");
-    printMatrix(inicio);
-    while (ant!=NULL)
-    {
-        
-        i++;
-        Matrix* novo=(Matrix*)malloc(sizeof(Matrix));
-        if(novo==NULL)return inicio;
-        aux->proxc=novo;
-        aux=aux->proxc;
-        if (next==NULL)
-        {
-            aux->proxl=NULL;
-        }else{
-            aux->proxl=next;
-            next=next->proxc;
-        }
         aux->proxc=NULL;
+        aux->x=0;
         ant->proxl=aux;
-        ant = ant->proxc;
-        aux->x=0;//alterar valores / falar com stor sobre valores novos
-        printf("\nteste c - %d valor de cima %d\n",i, ant->x);
+        ant=ant->proxc;
+        if (next!=NULL)next=next->proxc;
+        while (ant!=NULL)
+        {
+            aux->proxc=(Matrix*)malloc(sizeof(Matrix));
+            if(aux->proxc==NULL)return inicio;
+            aux=aux->proxc;
+            aux->proxl=next;
+            aux->proxc=NULL;
+            aux->x=0;//alterar valores / falar com stor sobre valores novos
+            ant->proxl=aux;
+            ant = ant->proxc;
+            if (next!=NULL)next=next->proxc;
+        }
+        return inicio;
     }
-    printf("\nteste fim addLine\n");
-    return inicio;
 }
 #pragma endregion
 #pragma region adicionar coluna
@@ -237,42 +176,72 @@ Matrix* addLine(Matrix* inicio, int linha){
  *
  * @return se a matriz estava vazia ao inicio da função ira ser criada a primeira casa e logo o inicio da matriz ira ser returnado.
  */
-Matrix* addColumn(Matrix* inicio){
+Matrix* addColumn(Matrix* inicio, int coluna){
     Matrix* aux=inicio;
-    Matrix* ant;
+    Matrix* ant=inicio;
+    Matrix* next=inicio;
     if (aux==NULL)
     {
         aux= (Matrix*)malloc(sizeof(Matrix));
-        if(aux==NULL)return NULL;
-        aux->proxc=NULL;
+        if(aux==NULL)return inicio;
         aux->proxl=NULL;
+        aux->proxc=NULL;
         aux->x=0;
         return aux;
     }
-    while (aux->proxc!=NULL)
+    if (coluna==0)
     {
-        aux=aux->proxc;
-    }
-    aux->proxc= (Matrix*)malloc(sizeof(Matrix));
-    if(aux->proxc==NULL)return;
-    ant=aux;
-    aux=aux->proxc;
-    ant=ant->proxl;
-    aux->proxl=NULL;
-    aux->proxc=NULL;
-    aux->x=0;
-    while (ant!=NULL)
-    {
-        aux->proxl= (Matrix*)malloc(sizeof(Matrix));
-        if(aux->proxl==NULL)return;
-        aux=aux->proxl;
-        ant->proxc=aux;
-        ant = ant->proxl;
+        aux=(Matrix*)malloc(sizeof(Matrix));
+        if(aux==NULL)return inicio;
+        aux->proxc=next;
         aux->proxl=NULL;
-        aux->proxc=NULL;
-        aux->x=0;//alterar valores / falar com stor sobre valores novos
+        aux->x=0;
+        inicio=aux;
+        next=next->proxl;
+        while (next!=NULL)
+        {
+            aux->proxl=(Matrix*)malloc(sizeof(Matrix));
+            if(aux->proxl==NULL)return inicio;
+            aux=aux->proxl;
+            aux->x=0;
+            aux->proxl=NULL;
+            aux->proxc=next;
+            next=next->proxl;
+        }
+        return inicio;
+    }else{
+        for (int i = 0; i < coluna-1; i++)
+        {
+            ant=ant->proxc;
+        }
+        if (ant==NULL)
+        {
+            return inicio;
+        }
+        aux=(Matrix*)malloc(sizeof(Matrix));
+        if(aux==NULL)return inicio;
+        next=ant;
+        next=next->proxc;
+        aux->proxc=next;
+        aux->proxl=NULL;
+        aux->x=0;
+        ant->proxc=aux;
+        ant=ant->proxl;
+        if (next!=NULL)next=next->proxl;
+        while (ant!=NULL)
+        {
+            aux->proxl=(Matrix*)malloc(sizeof(Matrix));
+            if(aux->proxl==NULL)return inicio;
+            aux=aux->proxl;
+            aux->proxc=next;
+            aux->proxl=NULL;
+            aux->x=0;//alterar valores / falar com stor sobre valores novos
+            ant->proxc=aux;
+            ant = ant->proxl;
+            if (next!=NULL)next=next->proxl;
+        }
+        return inicio;
     }
-    return inicio;
 }
 #pragma endregion
 #pragma region remover linha

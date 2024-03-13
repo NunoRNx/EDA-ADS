@@ -35,7 +35,7 @@ Matrix* ler(Matrix* inicio, const char* filename);
 Matrix* removeLine(Matrix* inicio, int linha);
 Matrix* removeColumn(Matrix* inicio, int coluna);
 Matrix* addLine(Matrix* inicio, int linha);
-Matrix* addColumn(Matrix* inicio);
+Matrix* addColumn(Matrix* inicio, int coluna);
 void printMatrix(Matrix* inicio);
 void replaceValue(Matrix* inicio, int linha, int coluna, int value);
 
