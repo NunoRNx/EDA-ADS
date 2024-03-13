@@ -1,4 +1,4 @@
-cd C:\Users\Nuno\OneDrive\Documentos\GitHub\EDA-ADS\Project 1
+cd Project 1
 
 del output\lib.o
 del output\main.o
@@ -16,9 +16,8 @@ gcc -c main.c -o output\main.o
 
 gcc -o output\main.exe output\main.o -Loutput -lhalg -lbiblioteca
 
-
 cd output
-
+cls
 main.exe
 
 pause
