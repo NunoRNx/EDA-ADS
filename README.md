@@ -13,7 +13,8 @@
  2-abrir pasta de projeto
 
 
- 3-alterar o caminho da pasta onde se encontra a solução na primeira linha de Run.bat
+ 3-alterar o caminho da pasta onde se encontra o código na primeira linha de Run.bat
+
 
  4-executar Run.bat
 
@@ -35,7 +36,10 @@ To run the programs on Windows systems requires:
   2-open project folder
 
 
-  3-execute Run.bat
+  3-change the path of the folder where the code is located in the first line of Run.bat
+
+
+  4-execute Run.bat
 
 
   the Run.bat file will run gcc and initialize the app
