@@ -45,6 +45,8 @@ To run the programs on Windows systems requires:
   the Run.bat file will run gcc and initialize the app
 
  
+
+ 
 Todo o trabalho realizado por Nuno Silva (honun)
 
 
