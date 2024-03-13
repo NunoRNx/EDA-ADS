@@ -27,12 +27,18 @@ int main(){
     Matrix* ini=NULL;
     Matrix* hini=NULL;
     const char* file = "nums.txt";
-    //int maxSum=0;
     printf("\nLeitura de file\n");
-    hini=ler(hini,file);
     ini=ler(ini,file);
     printMatrix(ini);
-    hungAlgorithm(hini,ini);
+
+    printf("add linha 0 e 2");
+    ini=addLine(ini,0);
+    printMatrix(ini);
+    ini=addLine(ini,2);
+    printMatrix(ini);
+
+    //hini=ler(hini, file);
+    //hungAlgorithm(hini,ini);
 
     /* printf("\nadicionar linha\n");
     ini=addLine(ini);
@@ -44,7 +50,7 @@ int main(){
     ini=removeLine(ini,3);
     printMatrix(ini);
     printf("\nadicionar 2 linhas\n");
-    ini=addLine(ini);
+    
     ini=addLine(ini);
     printMatrix(ini);
     printf("\nAdicionar coluna\n");

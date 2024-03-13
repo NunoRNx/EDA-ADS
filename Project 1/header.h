@@ -34,7 +34,7 @@ typedef struct Matrix {
 Matrix* ler(Matrix* inicio, const char* filename);
 Matrix* removeLine(Matrix* inicio, int linha);
 Matrix* removeColumn(Matrix* inicio, int coluna);
-Matrix* addLine(Matrix* inicio);
+Matrix* addLine(Matrix* inicio, int linha);
 Matrix* addColumn(Matrix* inicio);
 void printMatrix(Matrix* inicio);
 void replaceValue(Matrix* inicio, int linha, int coluna, int value);

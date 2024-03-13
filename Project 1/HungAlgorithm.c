@@ -41,7 +41,7 @@ void hungAlgorithm(Matrix* hini, Matrix* ini){
     {
         onlyCombination(hini, ini);
     }else{
-        //brute force
+        printf("\nA matriz tem mais do que uma solução\n");
     }
 }
 
