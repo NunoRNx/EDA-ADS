@@ -13,9 +13,11 @@
  2-abrir pasta de projeto
 
 
- 3-executar Run.bat
+ 3-alterar o caminho da pasta onde se encontra a solução na primeira linha de Run.bat
 
+ 4-executar Run.bat
 
+ 
  o ficheiro Run.bat ira correr o gcc e inicializar a app
 
 
