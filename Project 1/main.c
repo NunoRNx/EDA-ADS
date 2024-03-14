@@ -26,10 +26,9 @@
 
 int main(){
     Matrix* ini=NULL;
-    Matrix* hini=NULL;
     const char* file = "nums.txt";
     printf("\nLeitura de ficheiro de texto\n");
-    ini=ler(ini,file);
+    ini=ler(file);
     printMatrix(ini);
 
     printf("\nadd coluna 0\n");
@@ -60,9 +59,10 @@ int main(){
     replaceValue(ini,2,1,4);
     printMatrix(ini);
     
-    /* SOLUÇÃO
-    hini=ler(hini, file);
-    hungAlgorithm(hini,ini); */
+    /* SOLUÇÃO */
+    Matrix* hini=ler(file);
+    Matrix* original=ler(file);
+    hungAlgorithm(hini,original);
     return 0;
 }
 #pragma endregion

@@ -22,12 +22,12 @@
  * @param i parametro para rodar a matriz para a proxima linha.
  * @return fazemos a retoma do apondator da caixa inicial da lista.
  */
-Matrix* ler(Matrix* inicio, const char* filename){
+Matrix* ler(const char* filename){
     int num, j=0;
     char s;
     
     FILE *file=fopen(filename, "r");
-    Matrix* aux=inicio;
+    Matrix* aux=NULL;
     if(file==NULL)return NULL; //erro ao abrir file
     while ((fscanf(file, "%d%c", &num, &s) ==2))//leitura do primeiro valor
     {
@@ -370,3 +370,4 @@ void replaceValue(Matrix* inicio, int linha, int coluna, int value){
     aux->x=value;
 }
 #pragma endregion
+

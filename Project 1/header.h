@@ -31,7 +31,7 @@ typedef struct Matrix {
 /**
  * @brief Declaração de todas as funções.
  */
-Matrix* ler(Matrix* inicio, const char* filename);
+Matrix* ler(const char* filename);
 Matrix* removeLine(Matrix* inicio, int linha);
 Matrix* removeColumn(Matrix* inicio, int coluna);
 Matrix* addLine(Matrix* inicio, int linha);
@@ -39,7 +39,7 @@ Matrix* addColumn(Matrix* inicio, int coluna);
 void printMatrix(Matrix* inicio);
 void replaceValue(Matrix* inicio, int linha, int coluna, int value);
 
-void hungAlgorithm(Matrix* hini, Matrix* ini);
+void hungAlgorithm(Matrix* hini,Matrix* original);
 Matrix* Rezero(Matrix* hini);
 Matrix* inverse(Matrix* hini);
 int finalComb(Matrix* ini);

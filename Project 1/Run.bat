@@ -17,7 +17,7 @@ gcc -c main.c -o output\main.o
 gcc -o output\main.exe output\main.o -Loutput -lhalg -lbiblioteca
 
 cd output
-cls
+
 main.exe
 
 pause

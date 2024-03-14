@@ -13,7 +13,7 @@
 
 #pragma region ex7 teste
 //mlc menor linha/coluna
-void hungAlgorithm(Matrix* hini, Matrix* ini){
+void hungAlgorithm(Matrix* hini,Matrix* original){
     hini=inverse(hini);
     int mlc=printHa(hini);
     hini=HaZeros(hini);
@@ -25,7 +25,7 @@ void hungAlgorithm(Matrix* hini, Matrix* ini){
         while (VeriricarZeros(hini, LZ)==0)
         {
             LZ++;
-            printHa(hini);
+            //printHa(hini);
         }
         if (LZ>=mlc)
         {
@@ -37,12 +37,7 @@ void hungAlgorithm(Matrix* hini, Matrix* ini){
     }
     int comb=finalComb(hini);
     printHa(hini);
-    if (comb==mlc)
-    {
-        onlyCombination(hini, ini);
-    }else{
-        printf("\nA matriz tem mais do que uma solução\n");
-    }
+    onlyCombination(hini, original);
 }
 
 Matrix* inverse(Matrix* hini){
