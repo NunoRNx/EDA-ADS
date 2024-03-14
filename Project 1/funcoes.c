@@ -378,6 +378,9 @@ void replaceValue(Matrix* inicio, int linha, int coluna, int value){
 }
 #pragma endregion
 #pragma region escrever em file nova matriz
+/**
+ * @brief Escrita dos valores presentes na matriz num novo ficheiro de texto.
+ */
 void EscreverMatriz(Matrix* ini){
     Matrix* aux=ini;
     Matrix* ant=ini;
@@ -398,4 +401,4 @@ void EscreverMatriz(Matrix* ini){
     fclose(file);
 }
 #pragma endregion
-//283 code
+//301 code

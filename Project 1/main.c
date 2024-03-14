@@ -27,6 +27,7 @@
 int main(){
     Matrix* ini=NULL;
     const char* file = "nums.txt";
+    const char* filec = "nums.txt";
     printf("\nLeitura de ficheiro de texto\n");
     ini=ler(file);
     printMatrix(ini);
