@@ -75,9 +75,10 @@ Matrix* ler(const char* filename){
  * 
  * Escrita em forma de matriz dos dados presentes na lista.
  */
-void printMatrix(Matrix* inicio){
+bool printMatrix(Matrix* inicio){
     Matrix* aux=inicio;
     Matrix* ant=aux;
+    if (inicio==NULL)return false;
     printf("Matriz:\n");
     while (aux!=NULL)
     {
@@ -95,6 +96,7 @@ void printMatrix(Matrix* inicio){
         ant=ant->proxl;
         aux=ant;
     }
+    return true;
 }
 #pragma endregion
 #pragma region adicionar linha
@@ -112,30 +114,22 @@ Matrix* addLine(Matrix* inicio, int linha){
     Matrix* next=inicio;
     if (aux==NULL)
     {
-        aux= (Matrix*)malloc(sizeof(Matrix));
+        aux=fmalloc(NULL,NULL);
         if(aux==NULL)return inicio;
-        aux->proxc=NULL;
-        aux->proxl=NULL;
-        aux->x=0;
         return aux;
     }
     if (linha==0)
     {
-        aux=(Matrix*)malloc(sizeof(Matrix));
+        aux=fmalloc(next,NULL);
         if(aux==NULL)return inicio;
-        aux->proxl=next;
-        aux->proxc=NULL;
-        aux->x=0;
         inicio=aux;
         next=next->proxc;
         while (next!=NULL)
         {
-            aux->proxc=(Matrix*)malloc(sizeof(Matrix));
+
+            aux->proxc=fmalloc(next,NULL);
             if(aux->proxc==NULL)return inicio;
             aux=aux->proxc;
-            aux->x=0;
-            aux->proxc=NULL;
-            aux->proxl=next;
             next=next->proxc;
         }
         return inicio;
@@ -148,24 +142,19 @@ Matrix* addLine(Matrix* inicio, int linha){
         {
             return inicio;
         }
-        aux=(Matrix*)malloc(sizeof(Matrix));
-        if(aux==NULL)return inicio;
+        
         next=ant;
         next=next->proxl;
-        aux->proxl=next;
-        aux->proxc=NULL;
-        aux->x=0;
+        aux=fmalloc(next,NULL);
+        if(aux==NULL)return inicio;
         ant->proxl=aux;
         ant=ant->proxc;
         if (next!=NULL)next=next->proxc;
         while (ant!=NULL)
         {
-            aux->proxc=(Matrix*)malloc(sizeof(Matrix));
+            aux->proxc=fmalloc(next,NULL);
             if(aux->proxc==NULL)return inicio;
             aux=aux->proxc;
-            aux->proxl=next;
-            aux->proxc=NULL;
-            aux->x=0;//alterar valores / falar com stor sobre valores novos
             ant->proxl=aux;
             ant = ant->proxc;
             if (next!=NULL)next=next->proxc;
@@ -189,30 +178,21 @@ Matrix* addColumn(Matrix* inicio, int coluna){
     Matrix* next=inicio;
     if (aux==NULL)
     {
-        aux= (Matrix*)malloc(sizeof(Matrix));
+        aux=fmalloc(NULL,NULL);
         if(aux==NULL)return inicio;
-        aux->proxl=NULL;
-        aux->proxc=NULL;
-        aux->x=0;
         return aux;
     }
     if (coluna==0)
     {
-        aux=(Matrix*)malloc(sizeof(Matrix));
+        aux=fmalloc(NULL,next);
         if(aux==NULL)return inicio;
-        aux->proxc=next;
-        aux->proxl=NULL;
-        aux->x=0;
         inicio=aux;
         next=next->proxl;
         while (next!=NULL)
         {
-            aux->proxl=(Matrix*)malloc(sizeof(Matrix));
+            aux->proxl=fmalloc(NULL,next);
             if(aux->proxl==NULL)return inicio;
             aux=aux->proxl;
-            aux->x=0;
-            aux->proxl=NULL;
-            aux->proxc=next;
             next=next->proxl;
         }
         return inicio;
@@ -225,24 +205,18 @@ Matrix* addColumn(Matrix* inicio, int coluna){
         {
             return inicio;
         }
-        aux=(Matrix*)malloc(sizeof(Matrix));
-        if(aux==NULL)return inicio;
         next=ant;
         next=next->proxc;
-        aux->proxc=next;
-        aux->proxl=NULL;
-        aux->x=0;
+        aux=fmalloc(NULL,next);
+        if(aux==NULL)return inicio;
         ant->proxc=aux;
         ant=ant->proxl;
         if (next!=NULL)next=next->proxl;
         while (ant!=NULL)
         {
-            aux->proxl=(Matrix*)malloc(sizeof(Matrix));
+            aux->proxl=fmalloc(NULL,next);
             if(aux->proxl==NULL)return inicio;
             aux=aux->proxl;
-            aux->proxc=next;
-            aux->proxl=NULL;
-            aux->x=0;//alterar valores / falar com stor sobre valores novos
             ant->proxc=aux;
             ant = ant->proxl;
             if (next!=NULL)next=next->proxl;
@@ -356,14 +330,14 @@ Matrix* removeColumn(Matrix* inicio, int coluna){
  * @param coluna coordenada que representa a coluna do valor a que deseja ser alterado na matriz.
  * @param i contador para chegar até à posição desejada.
  */
-void replaceValue(Matrix* inicio, int linha, int coluna, int value){
+bool replaceValue(Matrix* inicio, int linha, int coluna, int value){
     Matrix* aux=inicio;
     for (int i = 0; i < linha; i++)
     {
         aux=aux->proxl;
         if (aux==NULL)
         {
-            return;
+            return false;
         }
     }
     for (int i = 0; i < coluna; i++)
@@ -371,20 +345,23 @@ void replaceValue(Matrix* inicio, int linha, int coluna, int value){
         aux=aux->proxc;
         if (aux==NULL)
         {
-            return;
+            return false;
         }
     }
     aux->x=value;
+    return true;
 }
 #pragma endregion
 #pragma region escrever em file nova matriz
 /**
  * @brief Escrita dos valores presentes na matriz num novo ficheiro de texto.
  */
-void EscreverMatriz(Matrix* ini){
+bool EscreverMatriz(Matrix* ini){
     Matrix* aux=ini;
     Matrix* ant=ini;
+    if (ini==NULL)return false;    
     FILE* file=fopen("matriz_alt.txt", "w");
+    if (file==NULL)return false;
     while (aux!=NULL)
     {
         fprintf(file, "%d",aux->x);
@@ -399,6 +376,25 @@ void EscreverMatriz(Matrix* ini){
         aux=ant;
     }
     fclose(file);
+    return true;
 }
 #pragma endregion
-//301 code
+#pragma region malloc
+/**
+ * @brief Criar novo nó.
+ * Criar novo nó e atribuir os valores devidos.
+ * 
+ * @param pline variavel que trás o valor a atribuir a próxima linha da matriz neste novo nó.
+ * @param pcol variavel que trás o valor a atribuir a próxima coluna da matriz neste novo nó.
+ * @return o novo nó da matriz.
+ */
+Matrix* fmalloc(Matrix* pline, Matrix* pcol){
+    Matrix* aux=NULL;
+    aux=(Matrix*)malloc(sizeof(Matrix));
+    if (aux==NULL)return NULL;
+    aux->proxc=pcol;
+    aux->proxl=pline;
+    aux->x=0;
+    return aux;
+}
+#pragma endregion

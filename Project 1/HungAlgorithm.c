@@ -13,7 +13,8 @@
 
 #pragma region ex7 teste
 //mlc menor linha/coluna
-void hungAlgorithm(Matrix* hini,Matrix* original){
+bool hungAlgorithm(Matrix* hini,Matrix* original){
+    if(hini==NULL)return false;
     hini=inverse(hini);
     int mlc=printHa(hini);
     hini=HaZeros(hini);
@@ -37,7 +38,9 @@ void hungAlgorithm(Matrix* hini,Matrix* original){
     }
     int comb=finalComb(hini);
     printHa(hini);
-    onlyCombination(hini, original);
+    int sum=onlyCombination(hini, original);
+    printf("\nSolucao:%d\n",sum);
+    return true;
 }
 
 Matrix* inverse(Matrix* hini){
@@ -378,7 +381,7 @@ int finalComb(Matrix* ini){
     return s;
 }
 
-void onlyCombination(Matrix* hini, Matrix* ini){
+int onlyCombination(Matrix* hini, Matrix* ini){
     Matrix* aux=hini;
     Matrix* ant=hini;
     Matrix* origin=ini;
@@ -400,6 +403,6 @@ void onlyCombination(Matrix* hini, Matrix* ini){
         antO=antO->proxl;
         origin=antO;
     }
-    printf("\nSolucao:%d\n",sum);
+    return sum;
 }
 #pragma endregion
