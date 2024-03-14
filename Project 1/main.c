@@ -58,6 +58,7 @@ int main(){
     replaceValue(ini,2,0,3);
     replaceValue(ini,2,1,4);
     printMatrix(ini);
+    EscreverMatriz(ini);
     
     /* SOLUÇÃO */
     Matrix* hini=ler(file);

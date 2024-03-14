@@ -377,4 +377,25 @@ void replaceValue(Matrix* inicio, int linha, int coluna, int value){
     aux->x=value;
 }
 #pragma endregion
+#pragma region escrever em file nova matriz
+void EscreverMatriz(Matrix* ini){
+    Matrix* aux=ini;
+    Matrix* ant=ini;
+    FILE* file=fopen("matriz_alt.txt", "w");
+    while (aux!=NULL)
+    {
+        fprintf(file, "%d",aux->x);
+        aux=aux->proxc;
+        while (aux!=NULL)
+        {
+            fprintf(file, ";%d",aux->x);
+            aux=aux->proxc;
+        }
+        fprintf(file,"\n");
+        ant=ant->proxl;
+        aux=ant;
+    }
+    fclose(file);
+}
+#pragma endregion
 //283 code

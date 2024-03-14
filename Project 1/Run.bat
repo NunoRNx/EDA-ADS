@@ -6,11 +6,11 @@ del output\main.exe
 del output\biblioteca.lib
 del output\halg.lib
 
-gcc -c lib.c -o output\lib.o
+gcc -c funcoes.c -o output\funcoes.o
 gcc -c HungAlgorithm.c -o output\halg.o
 
-gcc -shared -o output\biblioteca.lib output\lib.o
-gcc -shared -o output\halg.lib output\halg.o
+gcc -shared -o output\biblioteca.dll output\funcoes.o
+gcc -shared -o output\halg.dll output\halg.o
 
 gcc -c main.c -o output\main.o
 

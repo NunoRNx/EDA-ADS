@@ -38,6 +38,7 @@ Matrix* addLine(Matrix* inicio, int linha);
 Matrix* addColumn(Matrix* inicio, int coluna);
 void printMatrix(Matrix* inicio);
 void replaceValue(Matrix* inicio, int linha, int coluna, int value);
+void EscreverMatriz(Matrix* ini);
 
 void hungAlgorithm(Matrix* hini,Matrix* original);
 Matrix* Rezero(Matrix* hini);
