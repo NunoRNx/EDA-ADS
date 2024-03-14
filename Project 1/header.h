@@ -2,7 +2,7 @@
  * @file header.h
  * @author honun
  * @brief ficheiro de organização
- * @version 0.2
+ * @version 0.3
  * @date 2024-03-05
  * 
  * @copyright Copyright (c) 2024

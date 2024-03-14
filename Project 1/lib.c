@@ -2,7 +2,7 @@
  * @file lib.c
  * @author honun
  * @brief Project Lib (funções do projeto)
- * @version 0.4.1
+ * @version 0.4.3
  * @date 2024-03-05
  * 
  * @copyright Copyright (c) 2024
@@ -20,10 +20,11 @@
  * @param s caracter lido após o valor inteiro para determinar se é o último valor da linha.
  * @param j parametro para rodar a matriz para a proxima coluna.
  * @param i parametro para rodar a matriz para a proxima linha.
+ * @param verf parametro que verifica o ultimo carater lido no fim do ficheiro, caso seja um "enter" uma linha extra incorreta será criada e a função removerLine que remove a linha extra irá ser executada.
  * @return fazemos a retoma do apondator da caixa inicial da lista.
  */
 Matrix* ler(const char* filename){
-    int num, j=0;
+    int num, j=0, verf = 0;
     char s;
     
     FILE *file=fopen(filename, "r");
@@ -41,13 +42,15 @@ Matrix* ler(const char* filename){
     j=0;
     int i=1;
     aux=addLine(aux,i);
-    while ((fscanf(file, "%d%c", &num, &s) == 2))
+    while (fscanf(file, "%d%c", &num, &s) == 2)
     {
         replaceValue(aux,i,j,num);
         if (s==';')
         {
             j++;
+            verf=0;
         }else if(s=='\n'){
+            verf++;
             i++;
             j=0;
             aux=addLine(aux,i);
@@ -55,7 +58,11 @@ Matrix* ler(const char* filename){
             printf("\nMatriz mal formatada\n");
         }
     }
-    replaceValue(aux,i,j,num);
+    if (verf > 0){
+        aux=removeLine(aux,i);
+    }else{
+        replaceValue(aux,i,j,num);
+    }
     fclose(file);
     if(i==0)return NULL;//linha 13
     printf("leu com sucesso\n");
@@ -370,4 +377,4 @@ void replaceValue(Matrix* inicio, int linha, int coluna, int value){
     aux->x=value;
 }
 #pragma endregion
-
+//283 code
