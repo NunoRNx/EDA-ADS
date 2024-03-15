@@ -13,31 +13,59 @@
 
 #pragma region ex7 teste
 //mlc menor linha/coluna
-bool hungAlgorithm(Matrix* hini,Matrix* original){
+bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
     if(hini==NULL)return false;
     hini=inverse(hini);
+    hini2=inverse(hini2);
     int mlc=printHa(hini);
     hini=HaZeros(hini);
+    hini2=HaZeros(hini2);
     printHa(hini);
-    int LZ, i=0;
-    while (i==0)
+    int LZ, v=0, contZl=0, contZc=0, zc=0, zl=0,menor;
+    while (1)
     {
-        LZ=0;
-        while (VeriricarZeros(hini, LZ)==0)
+        zl=VerfZerosLine(hini2,&contZl);
+        zc=VerfZerosCollumn(hini2,&contZc);
+        if (contZc>=contZl)
         {
+            hini2=selectLineC(hini2,zc);
+        }else{
+            hini2=selectLineL(hini2,zl);
+        }
+        LZ=1;
+        printHa(hini2);
+        while (1)
+        {
+            zl=VerfZerosLine(hini2,&contZl);
+            zc=VerfZerosCollumn(hini2,&contZc);
+            printf("\nteste\ncontZc=%d zc=%d\ncontZl=%d zl=%d\n",contZc,zc,contZl,zl);
+            
+            if(contZc==0 && contZl==0)break;
+            if (contZl>=contZc)
+            {
+                hini2=selectLineL(hini2,zl);
+            }else{
+                hini2=selectLineC(hini2,zc);
+            }
             LZ++;
-            //printHa(hini);
+            printHa(hini2);
+            printf("\nmlc:%d\nLZ:%d\n",mlc,LZ);
         }
         if (LZ>=mlc)
         {
-            i++;
-        }else{
-            Rezero(hini);
-            SimplificarMatriz(hini);
+            printf("\nSolucao final\n");
+           break;
         }
+        Rezero(hini2);
+        printHa(hini2);
+        menor=menorNum(hini2);
+        printf("\nteste 6 menor:%d\n",menor);
+        SimplificarMatriz(hini,hini2,menor);
+        printHa(hini);
     }
     int comb=finalComb(hini);
     printHa(hini);
+    printHa(original);
     int sum=onlyCombination(hini, original);
     printf("\nSolucao:%d\n",sum);
     return true;
@@ -76,7 +104,6 @@ Matrix* Rezero(Matrix* hini){
     }
     return hini;
 }
-
 int printHa(Matrix* inicio){
     Matrix* aux=inicio;
     Matrix* ant=aux;
@@ -107,7 +134,6 @@ int printHa(Matrix* inicio){
     }
     return coluna;
 }
-
 Matrix* HaZeros(Matrix* ini){
     Matrix* aux=ini;
     Matrix* ant=ini;
@@ -171,43 +197,53 @@ Matrix* HaZeros(Matrix* ini){
 
 //zc/zl coluna/linha com mais zeros
 //contZc/contZl quantidade de zeros da coluna/linha com mais zeros
-bool VeriricarZeros(Matrix* ini, int LZ){
+Matrix* selectLineC(Matrix* ini, int zc){
     Matrix* aux=ini;
-    Matrix* ant=ini;
-    int i=0, cont=0, zc=0, zl=0, contZc=0, contZl=0, temp, linhas=0, colunas=0;
-    //colunas
+    Matrix* teste=ini;
+    for ( int i = 0; i < zc; i++)
+    {
+        aux=aux->proxc;
+    }
     while (aux!=NULL)
     {
-        temp=0;
-        while (aux!=NULL)
+        if (aux->x==0)
         {
-            if (aux->x==0)
-            {
-                temp++;//quantidade de zeros na coluna atual
-            }
-            aux=aux->proxl;
+            teste=aux->proxc;
+            aux->x=-1;
+        }else if(aux->x>0){
+            aux->x=-2;
+        }else if(aux->x==-2){
+            aux->x=-3;
         }
-        if (i==0)
-        {
-            zc=cont;
-            contZc=temp;
-            i++;
-        }else if (contZc<temp)
-        {
-            zc=cont;
-            contZc=temp;
-        }
-        
-        cont++;
-        ant=ant->proxc;
-        aux=ant;
+        aux=aux->proxl;
     }
-    colunas=cont-1;
+    return ini;
+}
+Matrix* selectLineL(Matrix* ini, int zc){
+    Matrix* aux=ini;
+    for ( int i = 0; i < zc; i++)
+    {
+        aux=aux->proxl;
+    }
+    while (aux!=NULL)
+    {
+        if (aux->x==0)
+        {
+            aux->x=-1;
+        }else if(aux->x>0){
+            aux->x=-2;
+        }else if(aux->x==-2){
+            aux->x=-3;
+        }
+        aux=aux->proxc;
+    }
+    return ini;
+}
+int VerfZerosLine(Matrix* ini, int* contZl){
     //linhas
-    aux=ini;
-    ant=ini;
-    i=0;
-    cont=0;
+    Matrix* aux=ini;
+    Matrix* ant=ini;
+    int i=0, temp, cont=0, zl=0;
     while (aux!=NULL)
     {
         temp=0;
@@ -222,65 +258,85 @@ bool VeriricarZeros(Matrix* ini, int LZ){
         if (i==0)
         {
             zl=cont;
-            contZl=temp;
-        }else if(contZl<temp){
+            *contZl=temp;
+            i++;
+        }else if(*contZl<temp){
             zl=cont;
-            contZl=temp;
+            *contZl=temp;
         }
         cont++;
         ant=ant->proxl;
-        aux=ant;
+        aux=ant; 
     }
-    linhas=cont-1;
-    aux=ini;
-    if (contZc>=contZl)
-    {
-        for ( i = 0; i < zc; i++)
-        {
-            aux=aux->proxc;
-        }
-        while (aux!=NULL)
-        {
-            if (aux->x==0)
-            {
-                aux->x=-1;
-            }
-            aux=aux->proxl;
-        } 
-    }else{
-        for ( i = 0; i < zl; i++)
-        {
-            aux=aux->proxl;
-        }
-        while (aux!=NULL)
-        {
-            if (aux->x==0)
-            {
-                aux->x=-1;
-            }
-            aux=aux->proxc;
-        }
-    }
-    if (contZc==0 && contZl==0)
-    {
-        return true;
-    }
-    return false;
+    return zl;
 }
-
-Matrix* SimplificarMatriz(Matrix* ini){
+int VerfZerosCollumn(Matrix* ini, int* contZc){
+    //colunas
     Matrix* aux=ini;
     Matrix* ant=ini;
-    int menor, i=0;
+    int i=0, temp, cont=0, zc=0;
+    while (aux!=NULL)
+    {
+        temp=0;
+        while (aux!=NULL)
+        {
+            if (aux->x==0)
+            {
+                temp++;//quantidade de zeros na coluna atual
+            }
+            aux=aux->proxl;
+        }
+        if (i==0)
+        {
+            zc=cont;
+            *contZc=temp;
+            i++;
+        }else if (*contZc<temp)
+        {
+            zc=cont;
+            *contZc=temp;
+        }
+        
+        cont++;
+        ant=ant->proxc;
+        aux=ant;
+    }
+    return zc;
+}
+
+int VerificarZeros(Matrix* ini){
+    Matrix* aux=ini;
+    Matrix* ant=ini;
+    int i;
     while (aux!=NULL)
     {
         while (aux!=NULL)
         {
-            if (i==0 && aux->x!=0)
+            if (aux->x==0)
+            {
+                aux->x=-1;
+            }
+            aux=aux->proxc;
+        }
+        ant=ant->proxl;
+        aux=ant;
+    }
+    return 1;
+}
+
+int menorNum(Matrix* ini){
+    Matrix* aux=ini;
+    Matrix* ant=ini;
+    int menor, i=0, v=0;
+    while (aux!=NULL)
+    {
+        while (aux!=NULL)
+        {
+            if (i==0 && aux->x!=0 && aux->x!=-2 && aux->x!=-3)
             {
                 menor=aux->x;
                 i++;
-            }else if(aux->x<menor && aux->x!=0)
+            }else if(aux->x<menor && aux->x!=0 && aux->x!=-2 && aux->x!=-3)
             {
                 menor=aux->x;
             }
@@ -289,20 +345,54 @@ Matrix* SimplificarMatriz(Matrix* ini){
         ant=ant->proxl;
         aux=ant;
     }
+    return menor;
+}
+Matrix* SimplificarMatriz(Matrix* ini, Matrix* ini2, int menor){
+    Matrix* aux=ini;
+    Matrix* aux2=ini2;
+    Matrix* ant=ini;
+    Matrix* ant2=ini2;
+    int i=0, v=0;
     aux=ini;
     ant=ini;
+    while (aux2!=NULL)
+    {
+        while (aux2!=NULL)
+        {
+            if(aux2->x!=0){
+                if (aux2->x>0)
+                {
+                    aux->x=aux->x-menor;
+                }
+                if (aux2->x==-3)
+                {
+                    aux->x=aux->x+menor;
+                }
+            }
+            aux2=aux2->proxc;
+            aux=aux->proxc;
+        }
+        ant2=ant2->proxl;
+        aux2=ant2;
+        ant=ant->proxl;
+        aux=ant;
+    }
+    aux=ini;
+    aux2=ini2;
+    ant=ini;
+    ant2=ini2;
     while (aux!=NULL)
     {
         while (aux!=NULL)
         {
-            if (aux->x!=0)
-            {
-                aux->x=aux->x-menor;
-            }
+            aux2->x=aux->x;
+            aux2=aux2->proxc;
             aux=aux->proxc;
         }
         ant=ant->proxl;
+        ant2=ant2->proxl;
         aux=ant;
+        aux2=ant2;
     }
     return ini;
 }
@@ -310,75 +400,76 @@ Matrix* SimplificarMatriz(Matrix* ini){
 int finalComb(Matrix* ini){
     Matrix* aux=ini;
     Matrix* ant=ini;
-    Matrix* Rze=ini;//remaining zeros
+    Matrix* aux2=ini;
     Rezero(ini);
     int z=0, s=0;
     while (aux!=NULL)
     {
         while (aux!=NULL)
         {
-            if (aux->x==0)
-            {
-                z++;
-            }
+            if(aux->x==0)z++;
             aux=aux->proxc;
         }
-        aux=ant;
         if (z==1)
         {
-            while (aux!=NULL)
+            aux=ant;
+            while (1)
             {
-                if (aux->x==0)
+                if (aux->x==0)break;               
+                aux=aux->proxc;
+                aux2=aux2->proxc;
+            }
+            aux->x=-1;
+            while (aux2!=NULL)
+            {
+                if (aux2->x==0)
                 {
-                    aux->x=-1;
-                    Rze=aux->proxl;
-                    while (Rze!=NULL)
-                    { 
-                        if (Rze->x==0)
-                        {
-                            Rze->x=-2;
-                        }
-                        Rze=Rze->proxl;
-                    }
+                    aux2->x=-2;
                 }
-            aux=aux->proxc;
+                aux2=aux2->proxl;
             }
         }
+        z=0;
         ant=ant->proxl;
         aux=ant;
-        z=0;
+        aux2=ini;
     }
+    z=0;
     aux=ini;
     ant=ini;
+    aux2=ini;
     while (aux!=NULL)
     {
         while (aux!=NULL)
         {
-            if (aux->x==0)
-            {
-                z++;
-            }
+            if(aux->x==0)z++;
             aux=aux->proxl;
         }
-        aux=ant;
-        
         if (z==1)
         {
-            while (aux!=NULL)
+            aux=ant;
+            while (1)
             {
-                if (aux->x==0)
+                if (aux->x==0)break;               
+                aux=aux->proxl;
+                aux2=aux2->proxl;
+            }
+            aux->x=-1;
+            while (aux2!=NULL)
+            {
+                if (aux2->x==0)
                 {
-                    aux->x=-1;
-                    s++;
+                    aux2->x=-2;
                 }
-            aux=aux->proxl;
+                aux2=aux2->proxc;
             }
         }
+        z=0;
         ant=ant->proxc;
         aux=ant;
-        z=0;
+        aux2=ini;
     }
-    return s;
+    return 1;
 }
 
 int onlyCombination(Matrix* hini, Matrix* ini){
@@ -387,6 +478,7 @@ int onlyCombination(Matrix* hini, Matrix* ini){
     Matrix* origin=ini;
     Matrix* antO=ini;
     int sum=0;
+    printf("\nSelcionados: ");
     while (aux!=NULL)
     {
         while (aux!=NULL)
@@ -394,6 +486,7 @@ int onlyCombination(Matrix* hini, Matrix* ini){
             if (aux->x==-1)
             {
                 sum+=origin->x;
+                printf("%d",origin->x);
             }
             aux=aux->proxc;
             origin=origin->proxc;
@@ -402,6 +495,7 @@ int onlyCombination(Matrix* hini, Matrix* ini){
         aux=ant;
         antO=antO->proxl;
         origin=antO;
+        if(aux!=NULL)printf("+");
     }
     return sum;
 }

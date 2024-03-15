@@ -43,12 +43,18 @@ bool EscreverMatriz(Matrix* ini);
 /**
  * @brief Declaração das funções utilizadas no Algoritmo Hungaro.
  */
-bool hungAlgorithm(Matrix* hini,Matrix* original);
+bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original);
 Matrix* Rezero(Matrix* hini);
 Matrix* inverse(Matrix* hini);
 int finalComb(Matrix* ini);
 int printHa(Matrix* inicio);
 Matrix* HaZeros(Matrix* ini);
-bool VeriricarZeros(Matrix* ini, int LZ);
-Matrix* SimplificarMatriz(Matrix* ini);
+int VerificarZeros(Matrix* ini);
+Matrix* SimplificarMatriz(Matrix* ini, Matrix* ini2, int menor);
 int onlyCombination(Matrix* hini, Matrix* ini);
+
+Matrix* selectLineC(Matrix* ini, int zc);
+Matrix* selectLineL(Matrix* ini, int zc);
+int VerfZerosLine(Matrix* ini, int* contZl);
+int VerfZerosCollumn(Matrix* ini, int* contZc);
+int menorNum(Matrix* ini);

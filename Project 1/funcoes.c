@@ -64,8 +64,6 @@ Matrix* ler(const char* filename){
         replaceValue(aux,i,j,num);
     }
     fclose(file);
-    if(i==0)return NULL;//linha 13
-    printf("leu com sucesso\n");
     return aux;
 }
 #pragma endregion
@@ -103,7 +101,7 @@ bool printMatrix(Matrix* inicio){
 /**
  * @brief Adicionar linhas à matriz.
  * 
- * Adiciona 1 nova linha no fim da matriz.
+ * Adiciona 1 nova linha no lugar indicado da matriz.
  * Caso o ficheiro de texto esteja vazio e a matriz consequentemente também, a função irá criar a primeira casa da matriz.
  *
  * @return se a matriz estava vazia ao inicio da função ira ser criada a primeira casa e logo o inicio da matriz ira ser returnado.
@@ -167,7 +165,7 @@ Matrix* addLine(Matrix* inicio, int linha){
 /**
  * @brief Adicionar coluna à matriz.
  * 
- * Adiciona 1 nova coluna no fim da matriz.
+ * Adiciona 1 nova coluna no lugar indicado da matriz.
  * Caso o ficheiro de texto esteja vazio e a matriz consequentemente também, a função irá criar a primeira casa da matriz.
  *
  * @return se a matriz estava vazia ao inicio da função ira ser criada a primeira casa e logo o inicio da matriz ira ser returnado.
@@ -274,7 +272,7 @@ Matrix* removeLine(Matrix* inicio, int linha){
 #pragma endregion
 #pragma region remover coluna
 /**
- * @brief Remover colunas à matriz.
+ * @brief Remover coluna na matriz.
  * 
  * Remover 1  coluna no local indicado na função main.
  * Caso o ficheiro de texto esteja vazio e a matriz consequentemente também, a função irá returnar sem nenhuma alteração efectuada.
@@ -398,3 +396,4 @@ Matrix* fmalloc(Matrix* pline, Matrix* pcol){
     return aux;
 }
 #pragma endregion
+
