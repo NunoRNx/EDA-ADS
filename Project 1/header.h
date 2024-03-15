@@ -42,8 +42,12 @@ void replaceValue(Matrix* inicio, int linha, int coluna, int value);
 void hungAlgorithm(Matrix* hini, Matrix* ini);
 Matrix* Rezero(Matrix* hini);
 Matrix* inverse(Matrix* hini);
+<<<<<<< Updated upstream
 int finalComb(Matrix* ini);
 int printHa(Matrix* inicio);
+=======
+bool printHa(Matrix* inicio, int* linhaf, int* colunaf);
+>>>>>>> Stashed changes
 Matrix* HaZeros(Matrix* ini);
 bool VeriricarZeros(Matrix* ini, int LZ);
 Matrix* SimplificarMatriz(Matrix* ini);

@@ -1,8 +1,10 @@
 cd C:\Users\Nuno\OneDrive\Documentos\GitHub\EDA-ADS\Project 1
 
-del output\lib.o
 del output\main.o
+del output\funcoes.o
+del output\halg.o
 del output\main.exe
+<<<<<<< Updated upstream
 del output\biblioteca.lib
 del output\halg.lib
 
@@ -22,3 +24,7 @@ cd output
 main.exe
 
 pause
+=======
+del output\biblioteca.dll
+del output\halg.dll
+>>>>>>> Stashed changes
