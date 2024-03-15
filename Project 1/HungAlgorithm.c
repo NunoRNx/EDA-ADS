@@ -15,12 +15,34 @@
 //mlc menor linha/coluna
 bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
     if(hini==NULL)return false;
+    int l,c,mlc,r;
     hini=inverse(hini);
     hini2=inverse(hini2);
-    int mlc=printHa(hini);
+    if (printHa(hini2,&l,&c)==1)
+    {
+        mlc=l;
+    }else if(l>c){
+        mlc=l-c;
+        for (int i = 0; i < mlc; i++)
+        {
+            addColumn(hini2,c,r);
+        }
+        mlc=mlc+2;
+    }else{
+        mlc=c-l;
+        for (int i = 0; i < mlc; i++)
+        {
+            addLine(hini2,l,r);
+        }
+        mlc=mlc+2;
+    }
+    printf("\nmatriz modificada 1 mlc:%d\n",mlc);
+    printHa(hini2,&l,&c);
     hini=HaZeros(hini);
     hini2=HaZeros(hini2);
-    int LZ, v=0, contZl=0, contZc=0, zc=0, zl=0,menor;
+    printf("\nmatriz modificada 1.5 mlc:%d\n",mlc);
+    printHa(hini2,&l,&c);
+    int LZ=0, v=0, contZl=0, contZc=0, zc=0, zl=0,menor;
     while (1)
     {
         zl=VerfZerosLine(hini2,&contZl);
@@ -54,6 +76,8 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
         menor=menorNum(hini2);
         SimplificarMatriz(hini,hini2,menor);
     }
+    printf("\nmatriz modificada 2 mlc: %d LZ:%d\n", mlc, LZ);
+    printHa(hini2,&l,&c);
     hini=finalCombL(hini);
     hini=finalCombC(hini);
     printHa(hini);
