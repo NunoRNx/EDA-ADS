@@ -27,7 +27,7 @@
 int main(){
     Matrix* ini=NULL;
     const char* file = "nums.txt";
-    /* printf("\nLeitura de ficheiro de texto\n");
+    printf("\nLeitura de ficheiro de texto\n");
     ini=ler(file);
     if(ini==NULL){
         printf("\nErro ao ler ficheiro!\n");
@@ -64,8 +64,9 @@ int main(){
     if(replaceValue(ini,2,1,4)==0)printf("Erro a alterar valor\n");
     if(printMatrix(ini)==0)printf("\nErro ao escrever matriz. Matriz vazia!\n");
     if(EscreverMatriz(ini)==0)printf("\nErro ao escrever matriz no ficheiro. Matriz vazia ou erro ao criar novo ficheiro!\n");
-     */
+    
     /* SOLUÇÃO */
+    printf("\n\nAlgoritmo Hungaro\n");
     Matrix* hini=ler(file);
     Matrix* hini2=ler(file);
     Matrix* original=ler(file);
@@ -73,7 +74,7 @@ int main(){
         printf("\nErro ao ler ficheiro!\n");
         return 0;
     }else{
-        printf("leu matriz com sucesso\n");
+        printf("\nleu matriz com sucesso\n");
     }
     if(hungAlgorithm(hini,hini2,original)==0)printf("\nErro, matriz vazia.\n");
     return 0;

@@ -1,8 +1,8 @@
 /**
  * @file main.c
  * @author honun
- * @brief testes extensivos
- * @version 0.31
+ * @brief Algoritmo Hungaro
+ * @version 0.8
  * @date 2024-02-28
  * 
  * @copyright Copyright (c) 2024
@@ -11,7 +11,7 @@
 
 #include "header.h"
 
-#pragma region ex7 teste
+#pragma region solução
 //mlc menor linha/coluna
 bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
     if(hini==NULL)return false;
@@ -20,7 +20,6 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
     int mlc=printHa(hini);
     hini=HaZeros(hini);
     hini2=HaZeros(hini2);
-    printHa(hini);
     int LZ, v=0, contZl=0, contZc=0, zc=0, zl=0,menor;
     while (1)
     {
@@ -33,7 +32,6 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
             hini2=selectLineL(hini2,zl);
         }
         LZ=1;
-        printHa(hini2);
         while (1)
         {
             zl=VerfZerosLine(hini2,&contZl);
@@ -46,7 +44,6 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
                 hini2=selectLineC(hini2,zc);
             }
             LZ++;
-            printHa(hini2);
         }
         if (LZ>=mlc)
         {
@@ -54,10 +51,8 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
             break;
         }
         Rezero(hini2);
-        printHa(hini2);
         menor=menorNum(hini2);
         SimplificarMatriz(hini,hini2,menor);
-        printHa(hini);
     }
     hini=finalCombL(hini);
     hini=finalCombC(hini);
@@ -199,7 +194,6 @@ Matrix* HaZeros(Matrix* ini){
 //contZc/contZl quantidade de zeros da coluna/linha com mais zeros
 Matrix* selectLineC(Matrix* ini, int zc){
     Matrix* aux=ini;
-    Matrix* teste=ini;
     for ( int i = 0; i < zc; i++)
     {
         aux=aux->proxc;
@@ -208,7 +202,6 @@ Matrix* selectLineC(Matrix* ini, int zc){
     {
         if (aux->x==0)
         {
-            teste=aux->proxc;
             aux->x=-1;
         }else if(aux->x>0){
             aux->x=-2;
@@ -519,8 +512,6 @@ Matrix* multiCombination(Matrix* hini){
     Matrix* aux=hini;
     Matrix* aux2=hini;
     Matrix* ant=hini;
-    printf("\nteste force\n");
-    printHa(hini);
     while (aux!=NULL)
     {
         int i=0;
