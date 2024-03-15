@@ -46,12 +46,15 @@ bool EscreverMatriz(Matrix* ini);
 bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original);
 Matrix* Rezero(Matrix* hini);
 Matrix* inverse(Matrix* hini);
-int finalComb(Matrix* ini);
 int printHa(Matrix* inicio);
 Matrix* HaZeros(Matrix* ini);
 int VerificarZeros(Matrix* ini);
 Matrix* SimplificarMatriz(Matrix* ini, Matrix* ini2, int menor);
+Matrix* finalCombL(Matrix* ini);
+Matrix* finalCombC(Matrix* ini);
+Matrix* finalCombM(Matrix* ini, int mlc);
 int onlyCombination(Matrix* hini, Matrix* ini);
+Matrix* multiCombination(Matrix* hini);
 
 Matrix* selectLineC(Matrix* ini, int zc);
 Matrix* selectLineL(Matrix* ini, int zc);

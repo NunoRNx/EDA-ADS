@@ -38,8 +38,6 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
         {
             zl=VerfZerosLine(hini2,&contZl);
             zc=VerfZerosCollumn(hini2,&contZc);
-            printf("\nteste\ncontZc=%d zc=%d\ncontZl=%d zl=%d\n",contZc,zc,contZl,zl);
-            
             if(contZc==0 && contZl==0)break;
             if (contZl>=contZc)
             {
@@ -49,23 +47,25 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
             }
             LZ++;
             printHa(hini2);
-            printf("\nmlc:%d\nLZ:%d\n",mlc,LZ);
         }
         if (LZ>=mlc)
         {
             printf("\nSolucao final\n");
-           break;
+            break;
         }
         Rezero(hini2);
         printHa(hini2);
         menor=menorNum(hini2);
-        printf("\nteste 6 menor:%d\n",menor);
         SimplificarMatriz(hini,hini2,menor);
         printHa(hini);
     }
-    int comb=finalComb(hini);
+    hini=finalCombL(hini);
+    hini=finalCombC(hini);
     printHa(hini);
     printHa(original);
+    if(finalCombM(hini, mlc)==0){
+        hini=multiCombination(hini);
+    }
     int sum=onlyCombination(hini, original);
     printf("\nSolucao:%d\n",sum);
     return true;
@@ -130,9 +130,9 @@ int printHa(Matrix* inicio){
     }
     if (linha>=coluna)
     {
-        return linha;
+        return coluna;
     }
-    return coluna;
+    return linha;
 }
 Matrix* HaZeros(Matrix* ini){
     Matrix* aux=ini;
@@ -303,7 +303,6 @@ int VerfZerosCollumn(Matrix* ini, int* contZc){
     }
     return zc;
 }
-
 int VerificarZeros(Matrix* ini){
     Matrix* aux=ini;
     Matrix* ant=ini;
@@ -323,7 +322,6 @@ int VerificarZeros(Matrix* ini){
     }
     return 1;
 }
-
 int menorNum(Matrix* ini){
     Matrix* aux=ini;
     Matrix* ant=ini;
@@ -396,13 +394,12 @@ Matrix* SimplificarMatriz(Matrix* ini, Matrix* ini2, int menor){
     }
     return ini;
 }
-
-int finalComb(Matrix* ini){
+Matrix* finalCombL(Matrix* ini){
     Matrix* aux=ini;
     Matrix* ant=ini;
     Matrix* aux2=ini;
     Rezero(ini);
-    int z=0, s=0;
+    int z=0;
     while (aux!=NULL)
     {
         while (aux!=NULL)
@@ -434,10 +431,13 @@ int finalComb(Matrix* ini){
         aux=ant;
         aux2=ini;
     }
-    z=0;
-    aux=ini;
-    ant=ini;
-    aux2=ini;
+    return ini;
+}
+Matrix* finalCombC(Matrix* ini){
+    Matrix* aux=ini;
+    Matrix* ant=ini;
+    Matrix* aux2=ini;
+    int z=0;
     while (aux!=NULL)
     {
         while (aux!=NULL)
@@ -469,9 +469,25 @@ int finalComb(Matrix* ini){
         aux=ant;
         aux2=ini;
     }
-    return 1;
+    return ini;
 }
-
+Matrix* finalCombM(Matrix* ini, int mlc){
+    Matrix* aux=ini;
+    Matrix* ant=ini;
+    int cont=0;
+    while (aux!=NULL)
+    {
+        while (aux!=NULL)
+        {
+            if(aux->x==-1)cont++;
+            aux=aux->proxc;
+        }
+        ant=ant->proxl;
+        aux=ant;
+    }
+    if (cont==mlc)return true;
+    return false;
+}
 int onlyCombination(Matrix* hini, Matrix* ini){
     Matrix* aux=hini;
     Matrix* ant=hini;
@@ -498,5 +514,39 @@ int onlyCombination(Matrix* hini, Matrix* ini){
         if(aux!=NULL)printf("+");
     }
     return sum;
+}
+Matrix* multiCombination(Matrix* hini){
+    Matrix* aux=hini;
+    Matrix* aux2=hini;
+    Matrix* ant=hini;
+    printf("\nteste force\n");
+    printHa(hini);
+    while (aux!=NULL)
+    {
+        int i=0;
+        while (i==0)
+        {
+            if (aux->x==0)break;              
+            aux=aux->proxc;
+        }
+        aux->x=-1;
+        aux2=aux;
+        aux=aux->proxc;
+        aux2=aux2->proxl;
+        while (aux!=NULL)
+        {
+            if (aux->x==0)aux->x=-2;
+            aux=aux->proxc;
+        }
+        while (aux2!=NULL)
+        {
+            if (aux2->x==0)aux2->x=-2;
+            aux2=aux2->proxl;
+        }
+        ant=ant->proxl;
+        aux=ant;
+        aux2=ant;
+    }
+    return hini;
 }
 #pragma endregion
