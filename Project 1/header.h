@@ -2,7 +2,7 @@
  * @file header.h
  * @author honun
  * @brief ficheiro de organização
- * @version 0.3
+ * @version 0.2
  * @date 2024-03-05
  * 
  * @copyright Copyright (c) 2024
@@ -29,7 +29,7 @@ typedef struct Matrix {
 } Matrix;
 
 /**
- * @brief Declaração das funções.
+ * @brief Declaração de todas as funções.
  */
 Matrix* fmalloc(Matrix* pline, Matrix* pcol);
 Matrix* ler(const char* filename, int* r);
@@ -37,17 +37,14 @@ void lerErro(int r, const char* filename);
 Matrix* removeLine(Matrix* inicio, int linha);
 Matrix* removeColumn(Matrix* inicio, int coluna);
 Matrix* addLine(Matrix* inicio, int linha, bool* r);
-Matrix* addColumn(Matrix* inicio, int coluna, bool* r);
+Matrix* addColumn(Matrix* inicio, int coluna,  bool* r);
 void printMatrix(Matrix* inicio);
 bool replaceValue(Matrix* inicio, int linha, int coluna, int value);
-bool EscreverMatriz(Matrix* ini);
-/**
- * @brief Declaração das funções utilizadas no Algoritmo Hungaro.
- */
+
 bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original);
 Matrix* Rezero(Matrix* hini);
 Matrix* inverse(Matrix* hini);
-int printHa(Matrix* inicio);
+bool printHa(Matrix* inicio, int* linhaf, int* colunaf);
 Matrix* HaZeros(Matrix* ini);
 int VerificarZeros(Matrix* ini);
 Matrix* SimplificarMatriz(Matrix* ini, Matrix* ini2, int menor);

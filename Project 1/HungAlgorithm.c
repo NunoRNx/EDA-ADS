@@ -26,6 +26,7 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
         for (int i = 0; i < mlc; i++)
         {
             addColumn(hini2,c,r);
+            addColumn(hini,c,r);
         }
         mlc=mlc+2;
     }else{
@@ -33,18 +34,21 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
         for (int i = 0; i < mlc; i++)
         {
             addLine(hini2,l,r);
+            addLine(hini,l,r);
         }
         mlc=mlc+2;
     }
     printf("\nmatriz modificada 1 mlc:%d\n",mlc);
     printHa(hini2,&l,&c);
     hini=HaZeros(hini);
+     printHa(hini,&l,&c);
     hini2=HaZeros(hini2);
     printf("\nmatriz modificada 1.5 mlc:%d\n",mlc);
     printHa(hini2,&l,&c);
     int LZ=0, v=0, contZl=0, contZc=0, zc=0, zl=0,menor;
     while (1)
     {
+        printf("\nteste 1\n");
         zl=VerfZerosLine(hini2,&contZl);
         zc=VerfZerosCollumn(hini2,&contZc);
         if (contZc>=contZl)
@@ -54,8 +58,10 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
             hini2=selectLineL(hini2,zl);
         }
         LZ=1;
+        printf("\nteste 2\n");
         while (1)
         {
+            printf("\nteste 3\n");
             zl=VerfZerosLine(hini2,&contZl);
             zc=VerfZerosCollumn(hini2,&contZc);
             if(contZc==0 && contZl==0)break;
@@ -67,21 +73,31 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
             }
             LZ++;
         }
-        if (LZ>=mlc)
+        printf("\nteste 4\n");
+        if (LZ==mlc)
         {
             printf("\nSolucao final\n");
             break;
         }
+        printf("\nteste 5\n");
         Rezero(hini2);
+        printf("\nteste 5.1\n");
         menor=menorNum(hini2);
+        printf("\nteste 5.2 menor:%d\n",menor);
+        printHa(hini2,&l,&c);
+         printHa(hini,&l,&c);
         SimplificarMatriz(hini,hini2,menor);
+        printf("\nteste 6\n");
+        printHa(hini2,&l,&c);
+         printHa(hini,&l,&c);
     }
     printf("\nmatriz modificada 2 mlc: %d LZ:%d\n", mlc, LZ);
     printHa(hini2,&l,&c);
+    printHa(hini,&l,&c);
     hini=finalCombL(hini);
     hini=finalCombC(hini);
-    printHa(hini);
-    printHa(original);
+    printHa(hini,&l,&c);
+    printHa(original,&l,&c);
     if(finalCombM(hini, mlc)==0){
         hini=multiCombination(hini);
     }
@@ -123,7 +139,7 @@ Matrix* Rezero(Matrix* hini){
     }
     return hini;
 }
-int printHa(Matrix* inicio){
+bool printHa(Matrix* inicio, int* linhaf, int* colunaf){
     Matrix* aux=inicio;
     Matrix* ant=aux;
     int linha=0, coluna=0;
@@ -147,11 +163,10 @@ int printHa(Matrix* inicio){
         ant=ant->proxl;
         aux=ant;
     }
-    if (linha>=coluna)
-    {
-        return coluna;
-    }
-    return linha;
+    *linhaf=linha;
+    *colunaf=coluna;
+    if (linha==coluna)return true;
+    return false;
 }
 Matrix* HaZeros(Matrix* ini){
     Matrix* aux=ini;
