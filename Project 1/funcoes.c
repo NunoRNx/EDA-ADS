@@ -23,16 +23,19 @@
  * @param verf parametro que verifica o ultimo carater lido no fim do ficheiro, caso seja um "enter" uma linha extra incorreta será criada e a função removerLine que remove a linha extra irá ser executada.
  * @return fazemos a retoma do apondator da caixa inicial da lista.
  */
-Matrix* ler(const char* filename){
+Matrix* ler(const char* filename, int* r){
     int num, j=0, verf = 0;
     char s;
     
     FILE *file=fopen(filename, "r");
     Matrix* aux=NULL;
-    if(file==NULL)return NULL; //erro ao abrir file
+    if(file==NULL){
+        *r=0;
+        return NULL; //erro ao abrir file
+    }
     while ((fscanf(file, "%d%c", &num, &s) ==2))//leitura do primeiro valor
     {
-        aux=addColumn(aux,j);
+        aux=addColumn(aux,j,r);
         replaceValue(aux,0,j,num);
         j++;
         if(s=='\n'){
@@ -41,7 +44,7 @@ Matrix* ler(const char* filename){
     }
     j=0;
     int i=1;
-    aux=addLine(aux,i);
+    aux=addLine(aux,i,r);
     while (fscanf(file, "%d%c", &num, &s) == 2)
     {
         replaceValue(aux,i,j,num);
@@ -53,9 +56,10 @@ Matrix* ler(const char* filename){
             verf++;
             i++;
             j=0;
-            aux=addLine(aux,i);
+            aux=addLine(aux,i,r);
         }else{
-            printf("\nMatriz mal formatada\n");
+            *r=-1;//formato da matriz nao valido
+            return NULL;
         }
     }
     if (verf > 0){
@@ -64,7 +68,16 @@ Matrix* ler(const char* filename){
         replaceValue(aux,i,j,num);
     }
     fclose(file);
+    *r=1;
     return aux;
+}
+/**
+ * @brief Imprimir tipo de erro sucedido na leitura.
+ */
+void lerErro(int r, const char* filename){
+    if(r==0)printf("\nErro ao abrir ficheiro %s\n", filename);
+    else if(r==-1)printf("\nErro, a matriz não está no formato necessario em %s\n", filename);
+    else if(r==1)printf("\nSucesso na leitura do ficheiro de texto %s\n", filename);
 }
 #pragma endregion
 #pragma region print
@@ -73,10 +86,9 @@ Matrix* ler(const char* filename){
  * 
  * Escrita em forma de matriz dos dados presentes na lista.
  */
-bool printMatrix(Matrix* inicio){
+void printMatrix(Matrix* inicio){
     Matrix* aux=inicio;
     Matrix* ant=aux;
-    if (inicio==NULL)return false;
     printf("Matriz:\n");
     while (aux!=NULL)
     {
@@ -94,7 +106,6 @@ bool printMatrix(Matrix* inicio){
         ant=ant->proxl;
         aux=ant;
     }
-    return true;
 }
 #pragma endregion
 #pragma region adicionar linha
@@ -106,7 +117,7 @@ bool printMatrix(Matrix* inicio){
  *
  * @return se a matriz estava vazia ao inicio da função ira ser criada a primeira casa e logo o inicio da matriz ira ser returnado.
  */
-Matrix* addLine(Matrix* inicio, int linha){
+Matrix* addLine(Matrix* inicio, int linha, bool* r){
     Matrix* aux=inicio;
     Matrix* ant=inicio;
     Matrix* next=inicio;
@@ -138,6 +149,7 @@ Matrix* addLine(Matrix* inicio, int linha){
         }
         if (ant==NULL)
         {
+            r=false;
             return inicio;
         }
         
@@ -157,8 +169,9 @@ Matrix* addLine(Matrix* inicio, int linha){
             ant = ant->proxc;
             if (next!=NULL)next=next->proxc;
         }
-        return inicio;
     }
+    r=true;
+    return inicio;
 }
 #pragma endregion
 #pragma region adicionar coluna
@@ -170,7 +183,7 @@ Matrix* addLine(Matrix* inicio, int linha){
  *
  * @return se a matriz estava vazia ao inicio da função ira ser criada a primeira casa e logo o inicio da matriz ira ser returnado.
  */
-Matrix* addColumn(Matrix* inicio, int coluna){
+Matrix* addColumn(Matrix* inicio, int coluna, bool* r){
     Matrix* aux=inicio;
     Matrix* ant=inicio;
     Matrix* next=inicio;
@@ -201,6 +214,7 @@ Matrix* addColumn(Matrix* inicio, int coluna){
         }
         if (ant==NULL)
         {
+            r=false;
             return inicio;
         }
         next=ant;
@@ -219,6 +233,7 @@ Matrix* addColumn(Matrix* inicio, int coluna){
             ant = ant->proxl;
             if (next!=NULL)next=next->proxl;
         }
+        r=true;
         return inicio;
     }
 }
@@ -396,4 +411,3 @@ Matrix* fmalloc(Matrix* pline, Matrix* pcol){
     return aux;
 }
 #pragma endregion
-

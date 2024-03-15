@@ -32,12 +32,13 @@ typedef struct Matrix {
  * @brief Declaração das funções.
  */
 Matrix* fmalloc(Matrix* pline, Matrix* pcol);
-Matrix* ler(const char* filename);
+Matrix* ler(const char* filename, int* r);
+void lerErro(int r, const char* filename);
 Matrix* removeLine(Matrix* inicio, int linha);
 Matrix* removeColumn(Matrix* inicio, int coluna);
-Matrix* addLine(Matrix* inicio, int linha);
-Matrix* addColumn(Matrix* inicio, int coluna);
-bool printMatrix(Matrix* inicio);
+Matrix* addLine(Matrix* inicio, int linha, bool* r);
+Matrix* addColumn(Matrix* inicio, int coluna, bool* r);
+void printMatrix(Matrix* inicio);
 bool replaceValue(Matrix* inicio, int linha, int coluna, int value);
 bool EscreverMatriz(Matrix* ini);
 /**
