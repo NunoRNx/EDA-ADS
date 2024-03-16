@@ -32,7 +32,7 @@ int main(){
     printf("\nLeitura de ficheiro de texto\n");
     ini=ler(file,&r);
     lerErro(r, file);
-    if(r!=1){
+    if(r==1){
         printMatrix(ini);
         //addColumn
         printf("\nadd coluna 0\n");
@@ -72,7 +72,6 @@ int main(){
         printMatrix(ini);
         if(EscreverMatriz(ini)==0)printf("\nErro ao escrever matriz no ficheiro. Matriz vazia ou erro ao criar novo ficheiro!\n");
     }
-
     /* SOLUÇÃO */
     int r1,r2,r3;
     printf("\n\nAlgoritmo Hungaro\n");
@@ -83,7 +82,9 @@ int main(){
     Matrix* original=ler(file,&r3);
     lerErro(r3,file);
     if(r1==1 && r2==1 && r3==1){
-        if(hungAlgorithm(hini,hini2,original)==0)printf("\nErro, matriz vazia.\n");
+        int sum;
+        if(hungAlgorithm(hini,hini2,original,&sum)==0)printf("\nErro, matriz vazia.\n");
+        printf("\nSolucao:%d\n",sum);
         return 0;
     }
     printf("\nErro na leitura da martiz, o algotimo nao ira comecar.\n");

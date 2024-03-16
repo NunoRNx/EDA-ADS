@@ -69,6 +69,7 @@ Matrix* ler(const char* filename, int* r){
     }
     fclose(file);
     *r=1;
+    lerErro(r,filename);
     return aux;
 }
 /**

@@ -13,8 +13,10 @@
 
 #pragma region solução
 //mlc menor linha/coluna
-bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
+bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original, int* sum){
     if(hini==NULL)return false;
+    if(hini2==NULL)return false;
+    if(original==NULL)return false;
     int l,c,mlc,r,i;
     hini=inverse(hini);
     hini2=inverse(hini2);
@@ -42,7 +44,7 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
     while (1)
     {
         zl=VerfZerosLine(hini2,&contZl);
-        zc=VerfZerosCollumn(hini2,&contZc);
+        zc=VerfZerosColumn(hini2,&contZc);
         if (contZc>=contZl)
         {
             hini2=selectLineC(hini2,zc);
@@ -53,7 +55,7 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
         while (1)
         {
             zl=VerfZerosLine(hini2,&contZl);
-            zc=VerfZerosCollumn(hini2,&contZc);
+            zc=VerfZerosColumn(hini2,&contZc);
             if(contZc==0 && contZl==0)break;
             if (contZl>=contZc)
             {
@@ -74,17 +76,13 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
     }
     hini=finalCombL(hini);
     hini=finalCombC(hini);
-    printHa(hini,&l,&c);
-    printHa(original,&l,&c);
+    printMatrix(hini);
+    printMatrix(original);
     if(finalCombM(hini, mlc)==0){
-        int sum=multiCombination(hini,original);
-        printf("\nSolucao:%d\n",sum);
+        *sum=multiCombination(hini,original);
     }else{
-        int sum=onlyCombination(hini, original);
-        printf("\nSolucao:%d\n",sum);
+        *sum=onlyCombination(hini, original);
     }
-    
-    
     return true;
 }
 
@@ -284,7 +282,7 @@ int VerfZerosLine(Matrix* ini, int* contZl){
     }
     return zl;
 }
-int VerfZerosCollumn(Matrix* ini, int* contZc){
+int VerfZerosColumn(Matrix* ini, int* contZc){
     //colunas
     Matrix* aux=ini;
     Matrix* ant=ini;
@@ -508,7 +506,6 @@ int onlyCombination(Matrix* hini, Matrix* ini){
     Matrix* origin=ini;
     Matrix* antO=ini;
     int sum=0;
-    printf("\nSelcionados: ");
     while (aux!=NULL)
     {
         while (aux!=NULL)
@@ -516,7 +513,6 @@ int onlyCombination(Matrix* hini, Matrix* ini){
             if (aux->x==-1)
             {
                 sum+=origin->x;
-                printf("%d",origin->x);
             }
             aux=aux->proxc;
             origin=origin->proxc;
@@ -525,7 +521,6 @@ int onlyCombination(Matrix* hini, Matrix* ini){
         aux=ant;
         antO=antO->proxl;
         origin=antO;
-        if(aux!=NULL)printf("+");
     }
     return sum;
 }

@@ -41,7 +41,7 @@ Matrix* addColumn(Matrix* inicio, int coluna,  bool* r);
 void printMatrix(Matrix* inicio);
 bool replaceValue(Matrix* inicio, int linha, int coluna, int value);
 
-bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original);
+bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original, int* sum);
 Matrix* Rezero(Matrix* hini);
 Matrix* inverse(Matrix* hini);
 bool printHa(Matrix* inicio, int* linhaf, int* colunaf);
@@ -57,5 +57,5 @@ int multiCombination(Matrix* hini, Matrix* original);
 Matrix* selectLineC(Matrix* ini, int zc);
 Matrix* selectLineL(Matrix* ini, int zc);
 int VerfZerosLine(Matrix* ini, int* contZl);
-int VerfZerosCollumn(Matrix* ini, int* contZc);
+int VerfZerosColumn(Matrix* ini, int* contZc);
 int menorNum(Matrix* ini);
