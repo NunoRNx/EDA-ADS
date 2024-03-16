@@ -15,40 +15,32 @@
 //mlc menor linha/coluna
 bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
     if(hini==NULL)return false;
-    int l,c,mlc,r;
+    int l,c,mlc,r,i;
     hini=inverse(hini);
     hini2=inverse(hini2);
     if (printHa(hini2,&l,&c)==1)
     {
         mlc=l;
     }else if(l>c){
-        mlc=l-c;
-        for (int i = 0; i < mlc; i++)
+        for (i = 0; i < l-c; i++)
         {
             addColumn(hini2,c,r);
             addColumn(hini,c,r);
         }
-        mlc=mlc+2;
+        mlc=l;
     }else{
-        mlc=c-l;
-        for (int i = 0; i < mlc; i++)
+        for (i = 0; i < c-l; i++)
         {
             addLine(hini2,l,r);
             addLine(hini,l,r);
         }
-        mlc=mlc+2;
+        mlc=c;
     }
-    printf("\nmatriz modificada 1 mlc:%d\n",mlc);
-    printHa(hini2,&l,&c);
     hini=HaZeros(hini);
-     printHa(hini,&l,&c);
     hini2=HaZeros(hini2);
-    printf("\nmatriz modificada 1.5 mlc:%d\n",mlc);
-    printHa(hini2,&l,&c);
     int LZ=0, v=0, contZl=0, contZc=0, zc=0, zl=0,menor;
     while (1)
     {
-        printf("\nteste 1\n");
         zl=VerfZerosLine(hini2,&contZl);
         zc=VerfZerosCollumn(hini2,&contZc);
         if (contZc>=contZl)
@@ -58,10 +50,8 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
             hini2=selectLineL(hini2,zl);
         }
         LZ=1;
-        printf("\nteste 2\n");
         while (1)
         {
-            printf("\nteste 3\n");
             zl=VerfZerosLine(hini2,&contZl);
             zc=VerfZerosCollumn(hini2,&contZc);
             if(contZc==0 && contZl==0)break;
@@ -73,36 +63,28 @@ bool hungAlgorithm(Matrix* hini,Matrix* hini2,Matrix* original){
             }
             LZ++;
         }
-        printf("\nteste 4\n");
         if (LZ==mlc)
         {
             printf("\nSolucao final\n");
             break;
         }
-        printf("\nteste 5\n");
         Rezero(hini2);
-        printf("\nteste 5.1\n");
         menor=menorNum(hini2);
-        printf("\nteste 5.2 menor:%d\n",menor);
-        printHa(hini2,&l,&c);
-         printHa(hini,&l,&c);
         SimplificarMatriz(hini,hini2,menor);
-        printf("\nteste 6\n");
-        printHa(hini2,&l,&c);
-         printHa(hini,&l,&c);
     }
-    printf("\nmatriz modificada 2 mlc: %d LZ:%d\n", mlc, LZ);
-    printHa(hini2,&l,&c);
-    printHa(hini,&l,&c);
     hini=finalCombL(hini);
     hini=finalCombC(hini);
     printHa(hini,&l,&c);
     printHa(original,&l,&c);
     if(finalCombM(hini, mlc)==0){
-        hini=multiCombination(hini);
+        int sum=multiCombination(hini,original);
+        printf("\nSolucao:%d\n",sum);
+    }else{
+        int sum=onlyCombination(hini, original);
+        printf("\nSolucao:%d\n",sum);
     }
-    int sum=onlyCombination(hini, original);
-    printf("\nSolucao:%d\n",sum);
+    
+    
     return true;
 }
 
@@ -547,36 +529,54 @@ int onlyCombination(Matrix* hini, Matrix* ini){
     }
     return sum;
 }
-Matrix* multiCombination(Matrix* hini){
+int multiCombination(Matrix* hini, Matrix* original){
     Matrix* aux=hini;
     Matrix* aux2=hini;
     Matrix* ant=hini;
+    Matrix* auxo=original;
+    Matrix* anto=original;
     while (aux!=NULL)
     {
-        int i=0;
-        while (i==0)
+        while (aux!=NULL)
         {
             if (aux->x==0)break;              
             aux=aux->proxc;
         }
-        aux->x=-1;
-        aux2=aux;
-        aux=aux->proxc;
-        aux2=aux2->proxl;
-        while (aux!=NULL)
-        {
-            if (aux->x==0)aux->x=-2;
+        if(aux!=NULL){
+            aux2=aux;
             aux=aux->proxc;
-        }
-        while (aux2!=NULL)
-        {
-            if (aux2->x==0)aux2->x=-2;
             aux2=aux2->proxl;
+            while (aux!=NULL)
+            {
+                if (aux->x==0)aux->x=-2;
+                aux=aux->proxc;
+            }
+            while (aux2!=NULL)
+            {
+                if (aux2->x==0)aux2->x=-2;
+                aux2=aux2->proxl;
+            }
         }
         ant=ant->proxl;
         aux=ant;
         aux2=ant;
     }
-    return hini;
+    int sum=0;
+    aux=hini;
+    ant=hini;
+    while (aux!=NULL && auxo!=NULL)
+    {
+        while (aux!=NULL && auxo!=NULL)
+        {
+            if(aux->x==0)sum+=auxo->x;
+            aux=aux->proxc;
+            auxo=auxo->proxc;
+        }
+        ant=ant->proxl;
+        anto=anto->proxl;
+        aux=ant;
+        auxo=anto;
+    }
+    return sum;
 }
 #pragma endregion

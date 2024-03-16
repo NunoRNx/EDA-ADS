@@ -52,7 +52,7 @@ Matrix* finalCombL(Matrix* ini);
 Matrix* finalCombC(Matrix* ini);
 Matrix* finalCombM(Matrix* ini, int mlc);
 int onlyCombination(Matrix* hini, Matrix* ini);
-Matrix* multiCombination(Matrix* hini);
+int multiCombination(Matrix* hini, Matrix* original);
 
 Matrix* selectLineC(Matrix* ini, int zc);
 Matrix* selectLineL(Matrix* ini, int zc);
