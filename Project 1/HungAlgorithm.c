@@ -1,6 +1,6 @@
 /**
  * @file main.c
- * @author honun
+ * @author Nuno Silva 28005
  * @brief Algoritmo Hungaro
  * @version 0.8
  * @date 2024-02-28

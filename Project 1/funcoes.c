@@ -1,6 +1,6 @@
 /**
  * @file lib.c
- * @author honun
+ * @author Nuno Silva 28005
  * @brief Project Lib (funções do projeto)
  * @version 0.4.3
  * @date 2024-03-05
@@ -20,10 +20,62 @@
  * @param s caracter lido após o valor inteiro para determinar se é o último valor da linha.
  * @param j parametro para rodar a matriz para a proxima coluna.
  * @param i parametro para rodar a matriz para a proxima linha.
+ * @param c parametro para verificar se a matriz tem apenas 1 coluna (c=0/existe apenas uma coluna).
  * @param verf parametro que verifica o ultimo carater lido no fim do ficheiro, caso seja um "enter" uma linha extra incorreta será criada e a função removerLine que remove a linha extra irá ser executada.
  * @return fazemos a retoma do apondator da caixa inicial da lista.
  */
 Matrix* ler(const char* filename, int* r){
+    int num=NULL, j=0, i=0, c=0, verf=1;
+    char s;    
+    FILE *file=fopen(filename, "r");
+    Matrix* ini=fmalloc(NULL,NULL);
+    Matrix* aux=ini;
+    Matrix* ant=ini;
+    Matrix* cima=ini;
+    if(file==NULL){
+        *r=0;
+        return NULL; //erro ao abrir file
+    }
+    while ((fscanf(file, "%d%c", &num, &s) ==2))
+    {
+        replaceValue(ini,i,j,num);
+        if (s==';')
+        {
+            aux=fmalloc(NULL,NULL);
+            ant->proxc=aux;
+            if (i!=0)
+            {
+                cima=cima->proxc;
+                cima->proxl=aux;
+            }
+            j++;
+            verf=0;
+            c++;
+        }else if(s=='\n'){
+            i++;
+            j=0;
+            cima=ini;
+            while (cima->proxl!=NULL)cima=cima->proxl;
+            aux=fmalloc(NULL,NULL);
+            cima->proxl=aux;
+            verf=1;
+        }else{
+            *r=-1;
+            return NULL;
+        }
+        ant=aux;
+    }
+    if(i==0 && j==0){
+        *r=-1;
+        return NULL;
+    }
+    if (verf==0 || c==0)replaceValue(ini,i,j,num);
+    else if(c!=0) removeLine(ini,i);
+    *r=1;
+    fclose(file);
+    return ini;
+}
+/* Matrix* ler(char* filename, int* r){
     int num, j=0, verf = 0;
     char s;
     
@@ -71,7 +123,7 @@ Matrix* ler(const char* filename, int* r){
     *r=1;
     lerErro(r,filename);
     return aux;
-}
+} */
 /**
  * @brief Imprimir tipo de erro sucedido na leitura.
  */

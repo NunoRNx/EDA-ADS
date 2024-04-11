@@ -1,6 +1,6 @@
 /**
  * @file header.h
- * @author honun
+ * @author Nuno Silva 28005
  * @brief ficheiro de organização
  * @version 0.2
  * @date 2024-03-05

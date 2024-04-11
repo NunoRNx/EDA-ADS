@@ -20,8 +20,11 @@ gcc -w -o output\main.exe output\main.o -Loutput -lhalg -lbiblioteca
 
 cd output
 
-
+cls
 
 main.exe
+
+del *.o
+del *.exe
 
 pause

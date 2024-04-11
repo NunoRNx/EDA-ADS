@@ -1,6 +1,6 @@
 /**
  * @file main.c
- * @author honun
+ * @author Nuno Silva 28005
  * @brief testes extensivos
  * @version 0.5
  * @date 2024-02-28
